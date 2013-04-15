@@ -6,8 +6,7 @@
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
-
-
+		
 	</head>
 	<body>
 		<!-- Start of home page -->
@@ -36,7 +35,49 @@
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>		
+		 <body>
+			<form>
+			<fieldset data-role="controlgroup" data-type="horizontal">
+    			<legend>Select time:</legend>
+   				<label for="select-native-11">Select A</label>
+    			<select name="select-native-11" id="select-native-11">
+        			<option value="#">g</option>
+        			<option value="#">T</option>
+        			<option value="#">Three</option>
+    			</select>
+    			<label for="select-native-12">Select B</label>
+    			<select name="select-native-12" id="select-native-12">
+        			<option value="#">One</option>
+        			<option value="#">Two</option>
+        			<option value="#">Three</option>
+    			</select>
+    			
+			</fieldset>
+			</form>
+
+			<form Name="newalarm">   
+                <div data-role="fieldcontain">
+    			<label for="name">Alarm name:</label>
+   				<input type="text" name="name" id="name" value=""  />
+				</div>	
+                <div data-role="fieldcontain">
+				<label for="flip-c">AM/PM:</label>
+				<select name="slider" id="flip-c" data-role="slider" data-theme="a">
+				<option value="am">AM</option>
+				<option value="pm">PM</option>
+				</select> 
+				</div>
+                Alarm tone: <input type="text" name="tone"><br>
+                <label for="slider-0">Volume:</label>
+  				<input type="range" name="slider" id="slider-0" value="25" min="0" max="100" data-theme="a" data-track-theme="b" />
+                Alarm repeat: <input type="text" name="arpt"><br>
+               
+                
+                <input type="submit" value="Save" onclick="return validation();">
+                    
+            </form>
+        </body>
+		
 		<p><a href="#one" data-direction="reverse">Home</a></p>	
 	</div><!-- /content -->
 
