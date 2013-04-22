@@ -3,19 +3,117 @@
 	<head>
 		<title>A-MAZE-ing Alarm!</title>
 		<link type="text/css" rel="stylesheet" href="style.css"/>
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />>
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+		<script type="text/javascript">
+			var cookieName = 'myalarm';
+			var alarmHour = 7;
+			var alarmMinute = 0;
+
+			function setAlarmFromList(theform){
+				alarmHour = parseInt(theform.alarmHour.options[theform.alarmHour.selectedIndex].value);
+				alarmMinute = parseInt(theform.alarmMinute.options[theform.alarmMinute.selectedIndex].value);
+				var ampm = theform.alarmAMPM.options[theform.alarmAMPM.selectedIndex].value;
+					
+				 // turn hours in 24 hours
+    			if(ampm == 'AM' && alarmHour == 12)
+        			alarmHour = 0;
+    			else if(ampm == 'PM' && alarmHour > 12)
+        			alarmHour += 12;
+				
+				setAlarmToCookie();
+			} // function
+
+			function getAlarmFromCookie(){
+				var cHour = parseInt(getCookie(cookieName + "_hour"));
+				var cMinute = parseInt(getCookie(cookieName + "_minute"));
+
+				if(! isNaN(cHour)) alarmHour = cHour;
+				if(! isNaN(cMinute)) alarmMinute = cMinute;
+	
+				// set the picklists to their proper spots
+	
+				// tbd
+	
+			} // function
+
+			function setAlarmToCookie(){
+				setCookie(cookieName + "_hour", alarmHour);
+				setCookie(cookieName + "_minute", alarmMinute);
+	
+			} // function
+
+			function runClock(){
+				var now = new Date();
+				var h = now.getHours();
+				var m = now.getMinutes();
+
+				var timeStr = ":" + addZero(m);
+					
+				if(h == 0)
+        			timeStr = "12" + timeStr + " AM";
+    			else if(h == 12)
+        			timeStr = "12" + timeStr + " PM";
+    			else if(h > 12)
+        			timeStr = (h - 12) + timeStr + " PM";
+    			else
+        			timeStr = h + timeStr + " AM";
+
+				document.getElementById('clock').innerHTML = timeStr;
+	
+				if(h == alarmHour && m == alarmMinute){
+						alert('WAKE UP!!!');
+					} // if
+				} // function
+
+			function addZero(amt){
+				if(amt < 10)
+					return("0" + amt);
+				else
+					return(amt);
+			} //function
+
+			function getCookie(name){
+				var arg = name + "=";
+				var alen = arg.length;
+				var clen = document.cookie.length;
+				var i = 0;
+				while(i < clen) {
+					var j = i + alen;
+					if(document.cookie.substring(i, j) == arg){
+					var endstr = document.cookie.indexOf (";", j);
+					if (endstr == -1) endstr = document.cookie.length;
+					return unescape(document.cookie.substring(j, endstr));
+				}//if
+				i = document.cookie.indexOf(" ", i) + 1;
+				if(i == 0) break;
+				}//while
+				return null;
+			} //function
+
+			function setCookie(name, value, expires, path, domain, secure){
+				document.cookie = name + "=" + escape(value) +
+					((expires == null) ? "" : ("; expires=" + expires.toGMTString())) +
+					((path == null) ? "" : ("; path=" + escape(path))) +
+					((domain == null) ? "" : ("; domain=" + escape(domain))) +
+					((secure == true) ? "; secure" : "");
+			} //function
+	</script>
 	</head>
 	<body>
-		<div data-role="page" id="one">
+		<div data-role="page" data-theme="a" id="one">
 			<center><h1><span></span>A-MAZE-ing Alarm Clock!<h1></center>
-			<center><img src="clock.png"></center>
+			<center><span id='clock'>clock</span><center>
+			<script>
+				// start the clock
+				runClock();
+			</script>
 			<br>
-			<center><a href="#two" data-role="button" data-inline="true" data-theme="a" rel="external" data-ajax="false">Wake me up!</a></center>
+			<center><a href="#two" data-role="button" data-inline="true" data-theme="a" data-mini="true">Alarms</a></center>
 		</div><!-- page 1 -->
 		
-		<div data-role="page" id="two">
+		<div data-role="page" data-theme="a" id="two">
 			<div data-role="header">
 				<a data-icon="gear" data-theme="c">Edit</a>
 				<h2>Alarms</h2>
@@ -23,27 +121,28 @@
 			</div>
 			
 			<ul data-role="listview" name="checklistItem">
-				<li><a href="#four">7:00 am</a></li>
-				<li><a href="#four">8:00 am</a></li>
+				<li><a href="#four">Alarm 1</a></li>
+				<li><a href="#four">Alarm 2</a></li>
 			</ul>
 			
 			<center><a href="#one" data-role="button" data-inline="true" data-mini="true" data-icon="home" data-iconpos="notext" data-theme="a">Home</a></center>
 		</div><!-- page 2 -->
 		
-		<div data-role="page" id="three">
+		<div data-role="page" data-theme="a" id="three">
 			<div data-role="header">
 				<a href="#two" data-theme="c" data-transition="slidedown">Cancel</a>
 				<h2>New Alarm</h2>
 				<a href="#two" data-theme="c" data-transition="fade">Save</a>
 			</div>
 			
-			<ul data-role="listview" data-theme="c">
+			<ul data-role="listview">
 				<li>On/Off 
 					<select name="flip-mini" id="flip-mini" data-role="slider" >
 						<option value="off">Off</option>
 						<option value="on">On</option>
 					</select>
 				</li>
+				<li><a href="#eight">Time</a></li>
 				<li><a href="#five">Repeat</a></li>
 				<li>Sound
 					<label for="select-choice-min" class="select"> </label>
@@ -63,24 +162,24 @@
 				</li>
 				<li><a href="#six">Label</a></li>
 				<li><a href="#seven">Maze</a></li>
-				<li><a href="#eight">Time</a></li>
 			</ul>
 		</div><!-- page 3 -->
 		
-		<div data-role="page" id="four">
+		<div data-role="page" data-theme="a" id="four">
 			<div data-role="header">
 				<a href="#two" data-theme="c" data-transition="slidedown">Cancel</a>
-				<h2>Edit Alarm</h2>
+				<h2>New Alarm</h2>
 				<a href="#two" data-theme="c" data-transition="fade">Save</a>
 			</div>
 			
-			<ul data-role="listview" data-theme="c">
+			<ul data-role="listview">
 				<li>On/Off 
 					<select name="flip-mini" id="flip-mini" data-role="slider" >
 						<option value="off">Off</option>
 						<option value="on">On</option>
 					</select>
 				</li>
+				<li><a href="#eight">Time</a></li>
 				<li><a href="#five">Repeat</a></li>
 				<li>Sound
 					<label for="select-choice-min" class="select"> </label>
@@ -100,11 +199,10 @@
 				</li>
 				<li><a href="#six">Label</a></li>
 				<li><a href="#seven">Maze</a></li>
-				<li><a href="#eight">Time</a></li>
 			</ul>
 		</div><!-- page 4 -->
 		
-		<div data-role="page" id="five">
+		<div data-role="page" data-theme="a" id="five">
 			<div data-role="header">
 				<a href="#four" data-theme="c">Back</a>
 				<h2></h2>
@@ -134,17 +232,17 @@
 			</fieldset>
 		</div><!-- page 5 -->
 		
-		<div data-role="page" id="six">
+		<div data-role="page" data-theme="a" id="six">
 			<div data-role="header">
 				<a href="#four" data-theme="c">Back</a>
 				<h2></h2>
 			</div>
 			
 			<label for="basic"></label>
-			<input type="text" name="name" id="basic" value="" data-mini="true"/>
+			<input type="text" name="name" id="basic" value=""/>
 		</div><!-- page 6 -->
 		
-		<div data-role="page" id="seven">
+		<div data-role="page" data-theme="a" id="seven">
 			<div data-role="header">
 				<a href="#four" data-theme="c">Back</a>
 				<h2></h2>
@@ -158,99 +256,104 @@
 				</select> 
 		</div><!-- page 7 -->
 		
-		<div data-role="page" id="eight">
+		<div data-role="page" data-theme="a" id="eight">
 			<div data-role="header">
 				<a href="#four" data-theme="c">Back</a>
 				<h2></h2>
 			</div>
 			
-			<center><form>
+			<center><form action='' name='alarmform'>
 				<fieldset data-role="controlgroup" data-type="horizontal">	
-   					<label for="select-native-11">Select A</label>
-     					<select name="select-native-11" id="select-native-11">
-         					<option value="#">12</option>
-         					<option value="#">1</option>
-         					<option value="#">2</option>
-         					<option value="#">3</option>
-         					<option value="#">4</option>
-         					<option value="#">5</option>
-         					<option value="#">6</option>
-         					<option value="#">7</option>
-         					<option value="#">8</option>
-         					<option value="#">9</option>
-         					<option value="#">10</option>
-         					<option value="#">11</option>
+     					<select name='alarmHour' size='1' onChange='setAlarmFromList(document.alarmform)' id='alarmHour'>
+         					<option value='1' >1</option>
+							<option value='2' >2</option>
+							<option value='3' >3</option>
+							<option value='4' >4</option>
+							<option value='5' >5</option>
+							<option value='6' >6</option>
+							<option value='7' selected>7</option>
+							<option value='8' >8</option>
+							<option value='9' >9</option>
+							<option value='10' >10</option>
+							<option value='11' >11</option>
+							<option value='12' >12</option>
      					</select>
-     				<label for="select-native-12">Select B</label>
-    					<select name="select-native-12" id="select-native-12">
-        					<option value="#">00</option>
-         					<option value="#">01</option>
-         					<option value="#">02</option>
-         					<option value="#">03</option>
-         					<option value="#">04</option>
-         					<option value="#">05</option>
-         					<option value="#">06</option>
-         					<option value="#">07</option>
-         					<option value="#">08</option>
-         					<option value="#">09</option>
-         					<option value="#">10</option>
-         					<option value="#">11</option>
-         					<option value="#">12</option>
-         					<option value="#">13</option>
-         					<option value="#">14</option>
-         					<option value="#">15</option>
-         					<option value="#">16</option>
-         					<option value="#">17</option>
-         					<option value="#">18</option>
-         					<option value="#">19</option>
-         					<option value="#">20</option>
-         					<option value="#">21</option>
-         					<option value="#">22</option>
-         					<option value="#">23</option>
-         					<option value="#">24</option>
-         					<option value="#">25</option>
-         					<option value="#">26</option>
-         					<option value="#">27</option>
-         					<option value="#">28</option>
-         					<option value="#">29</option>
-         					<option value="#">30</option>
-         					<option value="#">31</option>
-         					<option value="#">32</option>
-         					<option value="#">33</option>
-         					<option value="#">34</option>
-         					<option value="#">35</option>
-         					<option value="#">36</option>
-         					<option value="#">37</option>
-         					<option value="#">38</option>
-         					<option value="#">39</option>
-         					<option value="#">40</option>
-         					<option value="#">41</option>
-         					<option value="#">42</option>
-         					<option value="#">43</option>
-         					<option value="#">44</option>
-         					<option value="#">45</option>
-         					<option value="#">46</option>
-         					<option value="#">47</option>
-         					<option value="#">48</option>
-         					<option value="#">49</option>
-         					<option value="#">50</option>
-         					<option value="#">51</option>
-         					<option value="#">52</option>
-         					<option value="#">53</option>
-         					<option value="#">54</option>
-         					<option value="#">55</option>
-         					<option value="#">56</option>
-         					<option value="#">57</option>
-         					<option value="#">58</option>
-         					<option value="#">59</option>
+    					<select name='alarmMinute' size='1' onChange='setAlarmFromList(document.alarmform)' id='alarmMinute'>
+        					<option value='00' selected>00</option>
+							<option value='01' >01</option>
+							<option value='02' >02</option>
+							<option value='03' >03</option>
+							<option value='04' >04</option>
+							<option value='05' >05</option>
+							<option value='06' >06</option>
+							<option value='07' >07</option>
+							<option value='08' >08</option>
+							<option value='09' >09</option>
+							<option value='10' >10</option>
+							<option value='11' >11</option>
+							<option value='12' >12</option>
+							<option value='13' >13</option>
+							<option value='14' >14</option>
+							<option value='15' >15</option>
+							<option value='16' >16</option>
+							<option value='17' >17</option>
+							<option value='18' >18</option>
+							<option value='19' >19</option>
+							<option value='20' >20</option>
+							<option value='21' >21</option>
+							<option value='22' >22</option>
+							<option value='23' >23</option>
+							<option value='24' >24</option>
+							<option value='25' >25</option>
+							<option value='26' >26</option>
+							<option value='27' >27</option>
+							<option value='28' >28</option>
+							<option value='29' >29</option>
+							<option value='30' >30</option>
+							<option value='31' >31</option>
+							<option value='32' >32</option>
+							<option value='33' >33</option>
+							<option value='34' >34</option>
+							<option value='35' >35</option>
+							<option value='36' >36</option>
+							<option value='37' >37</option>
+							<option value='38' >38</option>
+							<option value='39' >39</option>
+							<option value='40' >40</option>
+							<option value='41' >41</option>
+							<option value='42' >42</option>
+							<option value='43' >43</option>
+							<option value='44' >44</option>
+							<option value='45' >45</option>
+							<option value='46' >46</option>
+							<option value='47' >47</option>
+							<option value='48' >48</option>
+							<option value='49' >49</option>
+							<option value='50' >50</option>
+							<option value='51' >51</option>
+							<option value='52' >52</option>
+							<option value='53' >53</option>
+							<option value='54' >54</option>
+							<option value='55' >55</option>
+							<option value='56' >56</option>
+							<option value='57' >57</option>
+							<option value='58' >58</option>
+							<option value='59' >59</option>
      					</select>
-     				<label for="select-native-13">Select C</label>
-     					<select name="select-native-13" id="select-native-13">
-     						<option value="#">AM</option>
-     						<option value="#">PM</option>
+     					<select name='alarmAMPM' size='1' onChange='setAlarmFromList(document.alarmform)' id='alarmAMPM'>
+     						<option value='AM' selected>AM</option>
+     						<option value='PM'>PM</option>
      					</select>
 				</fieldset>
 			</form>
+	
+			<script>
+				// get the alarm from the cookie (if it's set)
+				getAlarmFromCookie();
+				
+				// set the clock to update and check alarm every minute
+				window.setInterval("runClock()", 60 * 1000);
+			</script>
 		</div><!-- page 8 -->
 	
 	</body>

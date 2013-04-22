@@ -12,4 +12,9 @@ img {
 	width: 250px;
 }
 
-
+#clock {
+	font-family: Tahoma;
+	font-weight: bold;
+	font-size: 80px;
+	color: #8A00B8;
+}

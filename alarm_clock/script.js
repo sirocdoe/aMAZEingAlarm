@@ -1,0 +1,3 @@
+<script>
+	confirm("Welcome!")
+</script>
