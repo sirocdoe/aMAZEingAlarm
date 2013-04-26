@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>The A-MAZE-ing Alarm</title>
+		
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+		
+	</head>
+	<body>
+		<!-- Start of home page -->
+		<div data-role="page" data-theme="e" id="one">
+
+	<div data-role="header">
+		<h1>The A-MAZE-ing Alarm</h1>
+		</div><!-- /header -->
+
+	<div data-role="content">
+		<p> Create an alarm that will actually wake you up! Tap below to get started, or view the alarms you have already created!</p>	
+		<ul data-role="listview" data-inset="true" data-filter="false">
+			<li><a href="#two" rel="external" data-ajax="false" data-transition="slidefade" >Create an Alarm</a></li>
+			<li><a href="#three" rel="external" data-ajax="false" data-transition="slidefade">Your Alarms</a></li>
+	
+		</ul>
+	</div><!-- /content -->
+	</div><!-- /page -->
+		<!-- End of home page -->
+
+		<!-- Start of second page -->
+<div data-role="page" id="two">
+
+	<div data-role="header">
+		<h1>Create Alarm</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		 <body>
+			<form>
+			<fieldset data-role="controlgroup" data-type="horizontal">
+    			<legend>Select time:</legend>
+   				<label for="select-native-11">Select A</label>
+    			<select name="select-native-11" id="select-native-11">
+        			<option value="#">g</option>
+        			<option value="#">T</option>
+        			<option value="#">Three</option>
+    			</select>
+    			<label for="select-native-12">Select B</label>
+    			<select name="select-native-12" id="select-native-12">
+        			<option value="#">One</option>
+        			<option value="#">Two</option>
+        			<option value="#">Three</option>
+    			</select>
+    			
+			</fieldset>
+			</form>
+
+			<form Name="newalarm">   
+                <div data-role="fieldcontain">
+    			<label for="name">Alarm name:</label>
+   				<input type="text" name="name" id="name" value=""  />
+				</div>	
+                <div data-role="fieldcontain">
+				<label for="flip-c">AM/PM:</label>
+				<select name="slider" id="flip-c" data-role="slider" data-theme="a">
+				<option value="am">AM</option>
+				<option value="pm">PM</option>
+				</select> 
+				</div>
+                Alarm tone: <input type="text" name="tone"><br>
+                <label for="slider-0">Volume:</label>
+  				<input type="range" name="slider" id="slider-0" value="25" min="0" max="100" data-theme="a" data-track-theme="b" />
+                Alarm repeat: <input type="text" name="arpt"><br>
+               
+                
+                <input type="submit" value="Save" onclick="return validation();">
+                    
+            </form>
+        </body>
+		
+		<p><a href="#one" data-direction="reverse">Home</a></p>	
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<!-- Start of third page -->
+<div data-role="page" id="three">
+
+	<div data-role="header">
+		<h1>Your Alarms</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<p>These are the alarms you have created. Select an alarm to turn it on/off or to edit it.</p>		
+		<p><a href="#one" data-direction="reverse">Home</a></p>	
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+	</body>
